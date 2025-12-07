@@ -1,21 +1,20 @@
-# --- Python cache & environment ---
+# Virtual environments
+.venv/
+env/
+
+# Python cache
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
-.venv/
-env/
+
+# Database
 *.db
 *.sqlite3
 
-# --- VS Code settings ---
-.vscode/
-*.code-workspace
-
-# --- OS files ---
-.DS_Store
-Thumbs.db
-
-# --- Environment / secrets ---
+# Environment / secret files
 .env
 *.env
+
+# IDE settings
+.vscode/
