@@ -1,0 +1,46 @@
+### VS Code REST Client requests
+@base=http://127.0.0.1:8000
+
+### Health
+GET {{base}}/
+
+### Books
+GET {{base}}/books
+
+POST {{base}}/books
+Content-Type: application/json
+
+{
+  "title": "Clean Architecture",
+  "author": "Robert C. Martin",
+  "category": "Software"
+}
+
+### Members
+GET {{base}}/members
+
+POST {{base}}/members
+Content-Type: application/json
+
+{
+  "name": "Charlie",
+  "email": "charlie@example.com"
+}
+
+### Borrow
+POST {{base}}/transactions/borrow?book_id=1&member_id=1
+
+### Overdue
+GET {{base}}/transactions/overdue
+
+### Return
+POST {{base}}/transactions/1/return
+
+### Fines list
+GET {{base}}/fines
+
+### Pay fine (replace :id)
+POST {{base}}/fines/1/pay
+Content-Type: application/json
+
+{ "amount": 1.50 }
