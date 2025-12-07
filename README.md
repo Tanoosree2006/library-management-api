@@ -18,7 +18,8 @@ cd library_api
 
 # create & activate venv (Windows)
 python -m venv .venv
-.\.venv\Scriptsctivate
+.\.venv\Scripts\activate
+
 
 # macOS/Linux
 # python3 -m venv .venv

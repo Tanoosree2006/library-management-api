@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Enum, ForeignKey, DateTime, Float, UniqueConstraint
+from sqlalchemy import Column, Integer, String, Enum, ForeignKey, DateTime, Float
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 from datetime import datetime, timezone
 from .database import Base
@@ -19,12 +19,13 @@ class MemberStatus(str, enum.Enum):
     closed = "closed"
 
 class TransactionStatus(str, enum.Enum):
-    open = "open"           # currently borrowed
-    returned = "returned"   # closed
-    overdue = "overdue"     # open and past due
+    open = "open"         # currently borrowed
+    returned = "returned" # closed
+    overdue = "overdue"   # open and past due
 
 class Book(Base):
     __tablename__ = "books"
+
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
     title: Mapped[str] = mapped_column(String, nullable=False)
     author: Mapped[str] = mapped_column(String, nullable=False)
@@ -37,6 +38,7 @@ class Book(Base):
 
 class Member(Base):
     __tablename__ = "members"
+
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
     name: Mapped[str] = mapped_column(String, nullable=False)
     email: Mapped[str] = mapped_column(String, unique=True, nullable=False, index=True)
@@ -50,6 +52,7 @@ class Member(Base):
 
 class Transaction(Base):
     __tablename__ = "transactions"
+
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
     book_id: Mapped[int] = mapped_column(Integer, ForeignKey("books.id"), nullable=False, index=True)
     member_id: Mapped[int] = mapped_column(Integer, ForeignKey("members.id"), nullable=False, index=True)
@@ -64,12 +67,12 @@ class Transaction(Base):
     member = relationship("Member", back_populates="transactions")
     fines = relationship("Fine", back_populates="transaction")
 
-    __table_args__ = (
-        UniqueConstraint("book_id", "status", name="uq_book_open", deferrable=True, initially="DEFERRED"),
-    )
+    # NOTE: We intentionally removed the UNIQUE constraint that used deferrable options
+    # (unsupported by SQLite). Consistency is enforced in service logic by book.status.
 
 class Fine(Base):
     __tablename__ = "fines"
+
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
     member_id: Mapped[int] = mapped_column(Integer, ForeignKey("members.id"), nullable=False)
     transaction_id: Mapped[int | None] = mapped_column(Integer, ForeignKey("transactions.id"), nullable=True)
